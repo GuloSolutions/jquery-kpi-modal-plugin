@@ -1,0 +1,21 @@
+{
+  "name": "kpi",
+  "version": "1.0.0",
+  "description": "jQuery kpi plugin for measuring user engagement ",
+  "main": "kpi.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "user",
+    "engagement"
+  ],
+  "author": "Gulo Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "jquery-modal": "^0.9.1",
+    "js-cookie": "^2.2.0"
+  }
+}
