@@ -1,1 +1,1 @@
-# kpi-plugin
+# jquery-kpi-plugin
