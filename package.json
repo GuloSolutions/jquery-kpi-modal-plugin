@@ -2,7 +2,7 @@
   "name": "kpi",
   "version": "1.0.0",
   "description": "jQuery kpi plugin for measuring user engagement ",
-  "main": "kpi.js",
+  "main": "jquery.kpi.js",
   "scripts": {
     "test": "test"
   },
