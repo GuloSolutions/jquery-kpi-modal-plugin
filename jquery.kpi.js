@@ -32,7 +32,7 @@
                 if (Cookies.get('modalpopupcookie') === undefined) {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     // set cookie expiration time in 3 days
-                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '' });
+                    Cookies.set('modalpopupcookie', cval);
                 } else {
                     this.settings.isCookieSet = true;
                 }
@@ -57,17 +57,18 @@
             {
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
-                var isCookieSet = this.settings.isCookieSet;
-
                 var id = this.element.id;
 
                 $('body').mouseleave(function(){
-                    if (mouseLeave === false && engagement === false && isCookieSet === false) {
+                    if (mouseLeave === false && engagement === false) {
                         $('#'+id).modal();
                         mouseLeave = true;
                     }
                 });
                     this.settings.mouseLeave = mouseLeave;
+                    if (this.settings.isCookieSet === false){
+                        this.settings.isCookieSet = true;
+                    }
             },
 
             counter: function ()
@@ -82,6 +83,7 @@
                         clearInterval(this);
                     }
                     else {
+                        console.log( 'Currently at ' + (pageCounter++) );
                          checkConditions();
                     }
                 };
@@ -89,12 +91,13 @@
                 var checkConditions = function () {
                     if (pageCounter >= 7 && isCookieSet !== true){
                         $('#'+id).modal();
-                    } else if(pageCounter*7 > 0.66*(timeToRead)){
+                    }
+                    else if(pageCounter*7 < Math.trunc(timeToRead*(2/3)) ){
                         ('#'+id).modal();
                     }
                 };
 
-                setInterval(runCounter, 7000);
+                setInterval(runCounter, 6000);
                 runCounter();
             },
 
@@ -112,7 +115,10 @@
                     }
                     wordCount = gross.replace(/(<([^>]+)>)/ig,"").split(' ').length;
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
+                    console.log("wordCount:" + wordCount);
+                    console.log("timeToRead: " + timeToRead);
                 } else {
+                    console.log('no nodes');
                 }
             },
         } );
