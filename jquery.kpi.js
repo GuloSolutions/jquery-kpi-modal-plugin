@@ -1,5 +1,4 @@
 ;( function( $, window, document, undefined ) {
-
     "use strict";
         // Create the defaults once
         var pluginName = "kpi",
@@ -83,7 +82,6 @@
                         clearInterval(this);
                     }
                     else {
-                        console.log( 'Currently at ' + (pageCounter++) );
                          checkConditions();
                     }
                 };
@@ -115,11 +113,7 @@
                     }
                     wordCount = gross.replace(/(<([^>]+)>)/ig,"").split(' ').length;
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
-                    console.log("wordCount:" + wordCount);
-                    console.log("timeToRead: " + timeToRead);
-                } else {
-                    console.log('no nodes');
-                }
+                } 
             },
         } );
 
