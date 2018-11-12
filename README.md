@@ -14,7 +14,7 @@
   	- the cookie is set to expire in three days
   	- cookies are destroyed on quitting the browser
   	- if engagement is set to true, the popover will appear not sooner than approximately 40s or 2/3 of the time required to finish reading the page, whichever is shorter
-  	- page word count is assessed on page load using p nodes. Ex. if there are 170 words on page
+  	- page word count is assessed on page load using p nodes
 
 - Dependencies:
   - Jquery, js-cookie, jquery-modal
