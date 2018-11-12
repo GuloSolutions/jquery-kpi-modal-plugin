@@ -57,10 +57,12 @@
             {
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
+                var isCookieSet = this.settings.isCookieSet;
+
                 var id = this.element.id;
 
                 $('body').mouseleave(function(){
-                    if (mouseLeave === false && engagement === false) {
+                    if (mouseLeave === false && engagement === false && isCookieSet === false) {
                         $('#'+id).modal();
                         mouseLeave = true;
                     }
@@ -80,7 +82,6 @@
                         clearInterval(this);
                     }
                     else {
-                        console.log( 'Currently at ' + (pageCounter++) );
                          checkConditions();
                     }
                 };
@@ -111,10 +112,7 @@
                     }
                     wordCount = gross.replace(/(<([^>]+)>)/ig,"").split(' ').length;
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
-                    console.log("wordCount:" + wordCount);
-                    console.log("timeToRead: " + timeToRead);
                 } else {
-                    console.log('no nodes');
                 }
             },
         } );
