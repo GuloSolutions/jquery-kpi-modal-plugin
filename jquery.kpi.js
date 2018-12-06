@@ -18,6 +18,12 @@
             this.init();
         }
 
+        if (sessionStorage.getItem("popped") === undefined) {
+            var m_trigger = 0;
+        } else {
+            var m_trigger = sessionStorage.getItem("popped");
+        }
+
         $.extend( Plugin.prototype, {
             init: function() {
                 this.checkCookies();
@@ -31,7 +37,7 @@
                 if (Cookies.get('modalpopupcookie') === undefined) {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     // set cookie expiration time in 3 days
-                    Cookies.set('modalpopupcookie', cval);
+                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '' });
                 } else {
                     this.settings.isCookieSet = true;
                 }
@@ -50,6 +56,7 @@
                     }, 2000);
                 }
                 this.settings.isCookieSet = true;
+                sessionStorage.setItem('popped', m_trigger++);
             },
 
             isMouseLeave: function()
@@ -57,13 +64,18 @@
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
                 var id = this.element.id;
+                var mcookie = parseInt(sessionStorage.getItem('popped'));
+
 
                 $('body').mouseleave(function(){
-                    if (mouseLeave === false && engagement === false) {
+                    if (mouseLeave === false && engagement === false && mcookie <= 1) {
                         $('#'+id).modal();
                         mouseLeave = true;
+                        mcookie++;
+                        sessionStorage.setItem('popped', mcookie);
                     }
                 });
+
                     this.settings.mouseLeave = mouseLeave;
                     if (this.settings.isCookieSet === false){
                         this.settings.isCookieSet = true;
@@ -113,7 +125,7 @@
                     }
                     wordCount = gross.replace(/(<([^>]+)>)/ig,"").split(' ').length;
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
-                } 
+                }
             },
         } );
 
