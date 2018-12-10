@@ -37,7 +37,7 @@
                 if (Cookies.get('modalpopupcookie') === undefined) {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     // set cookie expiration time in 3 days
-                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '' });
+                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
                 } else {
                     this.settings.isCookieSet = true;
                 }
