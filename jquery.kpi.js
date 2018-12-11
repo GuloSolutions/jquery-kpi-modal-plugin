@@ -29,8 +29,10 @@
                 this.checkCookies();
                 this.isMouseLeave();
                 this.timeOut();
-                this.counter();
-                this.checkWordCount();
+                if (this.settings.engagement){
+                    this.counter();
+                    this.checkWordCount();
+                }
             },
             checkCookies: function( ) {
                 // check cookies
@@ -66,13 +68,11 @@
                 var id = this.element.id;
                 var mcookie = parseInt(sessionStorage.getItem('popped'));
 
-
                 $('body').mouseleave(function(){
-                    if (mouseLeave === false && engagement === false && mcookie <= 1) {
+                    if (mouseLeave === false && engagement === false && m_trigger <= 2) {
                         $('#'+id).modal();
+                        sessionStorage.setItem('popped', m_trigger++);
                         mouseLeave = true;
-                        mcookie++;
-                        sessionStorage.setItem('popped', mcookie);
                     }
                 });
 
