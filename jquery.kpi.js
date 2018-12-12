@@ -7,7 +7,9 @@
                 isCookieSet: false,
                 mouseLeave: false,
                 pageCounter: 0,
-                timeToRead: 0
+                timeToRead: 0,
+                timeToTrigger: 0,
+                modalCounter:0
             };
 
         function Plugin ( element, options ) {
@@ -22,15 +24,20 @@
             var m_trigger = 0;
         } else {
             var m_trigger = sessionStorage.getItem("popped");
+            console.log('att he beginnign' + m_trigger);
+        }
+
+        if (mCounter === undefined){
+            var mCounter = 0;
         }
 
         $.extend( Plugin.prototype, {
             init: function() {
-                this.checkCookies();
+                //this.checkCookies();
+                this.modalCounter();
+                this.counter();
                 this.isMouseLeave();
-                this.timeOut();
-                if (this.settings.engagement){
-                    this.counter();
+                if (this.settings.engagement == true){
                     this.checkWordCount();
                 }
             },
@@ -54,32 +61,50 @@
                 if (this.settings.isCookieSet === false
                     && engagement === false){
                     window.setTimeout(function(){
-                        $('#'+id).modal();
+                        $('#'+id).modal({
+                            fadeDuration: 250
+                        });
+                    this.checkCookies();
+
                     }, 2000);
                 }
                 this.settings.isCookieSet = true;
-                sessionStorage.setItem('popped', m_trigger++);
+
+                m_trigger++;
+                sessionStorage.setItem('popped', m_trigger);
             },
 
             isMouseLeave: function()
             {
+                var id = this.element.id;
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
-                var id = this.element.id;
-                var mcookie = parseInt(sessionStorage.getItem('popped'));
+                var trigger = parseInt(sessionStorage.getItem("popped"));
+
+                console.log('Mtrigger ' + trigger);
+                console.log(mouseLeave);
+
+                var checkCookies =  function() {
+                // check cookies
+                if (Cookies.get('modalpopupcookie') === undefined) {
+                    var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                    // set cookie expiration time in 3 days
+                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
+                } else {
+                    this.settings.isCookieSet = true;
+                }
+            };
 
                 $('body').mouseleave(function(){
-                    if (mouseLeave === false && engagement === false && m_trigger <= 2) {
-                        $('#'+id).modal();
-                        sessionStorage.setItem('popped', m_trigger++);
-                        mouseLeave = true;
+                    if (engagement === false && trigger <= 2 && mCounter <= 3) {
+                        $('#'+id).modal({
+                            fadeDuration: 250
+                        });
                     }
                 });
-
-                    this.settings.mouseLeave = mouseLeave;
-                    if (this.settings.isCookieSet === false){
-                        this.settings.isCookieSet = true;
-                    }
+                m_trigger++;
+                sessionStorage.setItem("popped", m_trigger);
+                checkCookies();
             },
 
             counter: function ()
@@ -109,6 +134,20 @@
 
                 setInterval(runCounter, 6000);
                 runCounter();
+            },
+
+            modalCounter: function(){
+                var runModalCounter = function(){
+                    if (mCounter == 10) {
+                        return;
+                    } else {
+                        mCounter++;
+                        console.log(mCounter);
+                    }
+                };
+
+                setInterval(runModalCounter, 1000);
+                runModalCounter();
             },
 
             // get word count using p nodes
