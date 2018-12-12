@@ -24,7 +24,6 @@
             var m_trigger = 0;
         } else {
             var m_trigger = sessionStorage.getItem("popped");
-            console.log('att he beginnign' + m_trigger);
         }
 
         if (mCounter === undefined){
@@ -80,9 +79,6 @@
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
                 var trigger = parseInt(sessionStorage.getItem("popped"));
-
-                console.log('Mtrigger ' + trigger);
-                console.log(mouseLeave);
 
                 var checkCookies =  function() {
                 // check cookies
@@ -142,10 +138,9 @@
                         return;
                     } else {
                         mCounter++;
-                        console.log(mCounter);
                     }
                 };
-
+                
                 setInterval(runModalCounter, 1000);
                 runModalCounter();
             },
