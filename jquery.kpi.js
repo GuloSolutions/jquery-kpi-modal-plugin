@@ -20,8 +20,11 @@
             this.init();
         }
 
+        //Cookies.remove('buttonmodal');
+
         if (sessionStorage.getItem("popped") === undefined) {
             var m_trigger = 0;
+            sessionStorage.setItem("popped", m_trigger);
         } else {
             var m_trigger = sessionStorage.getItem("popped");
         }
@@ -32,26 +35,14 @@
 
         $.extend( Plugin.prototype, {
             init: function() {
-                //this.checkCookies();
                 this.modalCounter();
                 this.counter();
                 this.isMouseLeave();
-                if (this.settings.engagement == true){
+                if (this.settings.engagement === true){
                     this.checkWordCount();
                 }
             },
-            checkCookies: function( ) {
-                // check cookies
-                if (Cookies.get('modalpopupcookie') === undefined) {
-                    var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                    // set cookie expiration time in 3 days
-                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
-                } else {
-                    this.settings.isCookieSet = true;
-                }
-            },
 
-            // set default timeout for engagement false
             timeOut: function()
             {
                 var engagement  = this.settings.engagement;
@@ -63,14 +54,10 @@
                         $('#'+id).modal({
                             fadeDuration: 250
                         });
-                    this.checkCookies();
-
                     }, 2000);
                 }
-                this.settings.isCookieSet = true;
-
                 m_trigger++;
-                sessionStorage.setItem('popped', m_trigger);
+                sessionStorage.setItem("popped", m_trigger);
             },
 
             isMouseLeave: function()
@@ -78,29 +65,38 @@
                 var id = this.element.id;
                 var mouseLeave = this.settings.mouseLeave;
                 var engagement = this.settings.engagement;
-                var trigger = parseInt(sessionStorage.getItem("popped"));
+                var trigger = sessionStorage.getItem("popped");
 
                 var checkCookies =  function() {
-                // check cookies
-                if (Cookies.get('modalpopupcookie') === undefined) {
+                    if (Cookies.get('modalpopupcookie') === undefined) {
+                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        // set cookie expiration time in 3 days
+                        Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
+                    }
+                };
+
+                var setCookieForPage = function() {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                    // set cookie expiration time in 3 days
-                    Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
-                } else {
-                    this.settings.isCookieSet = true;
-                }
-            };
+                    Cookies.set('modalpageopened', cval);
+                };
 
                 $('body').mouseleave(function(){
-                    if (engagement === false && trigger <= 2 && mCounter <= 3) {
+
+                    var activated = $('#coupon-cards');
+
+                    if (engagement === false && trigger <= 2 && mCounter <= 1) {
+
+                        if (activated.length == 0 || activated.css('display') ==  'none') {
                         $('#'+id).modal({
                             fadeDuration: 250
                         });
+                        setCookieForPage();
+                        m_trigger++;
+                        sessionStorage.setItem("popped", m_trigger);
+                        checkCookies();
+                        }
                     }
                 });
-                m_trigger++;
-                sessionStorage.setItem("popped", m_trigger);
-                checkCookies();
             },
 
             counter: function ()
@@ -138,11 +134,25 @@
                         return;
                     } else {
                         mCounter++;
+                        console.log(mCounter);
                     }
                 };
-                
+
                 setInterval(runModalCounter, 1000);
                 runModalCounter();
+            },
+
+            detectButtonActivatedModal: function(){
+
+                var setModalCookie = function() {
+                    var cval = Math.random().toString(36).substring(2, 15);
+                    Cookies.set('buttonmodal', cval);
+                };
+
+                $("#coupon-cards" ).click(function() {
+                        console.log( "Goodbye!" );
+                        setModalCookie();
+                });
             },
 
             // get word count using p nodes
