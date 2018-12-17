@@ -38,7 +38,7 @@
                 this.modalCounter();
                 this.counter();
 
-                this.isMouseLeave(this.settings.fadeDuration);
+                this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
                 if (this.settings.engagement === true){
                     this.checkWordCount();
                 }
