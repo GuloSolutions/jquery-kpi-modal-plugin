@@ -9,7 +9,9 @@
                 pageCounter: 0,
                 timeToRead: 0,
                 timeToTrigger: 0,
-                modalCounter:0
+                modalCounter:0,
+                fadeDuration: 250,
+                fadeDelay: 0
             };
 
         function Plugin ( element, options ) {
@@ -19,8 +21,6 @@
             this._name = pluginName;
             this.init();
         }
-
-        //Cookies.remove('buttonmodal');
 
         if (sessionStorage.getItem("popped") === undefined) {
             var m_trigger = 0;
@@ -37,13 +37,14 @@
             init: function() {
                 this.modalCounter();
                 this.counter();
-                this.isMouseLeave();
+
+                this.isMouseLeave(this.settings.fadeDuration);
                 if (this.settings.engagement === true){
                     this.checkWordCount();
                 }
             },
 
-            timeOut: function()
+            timeOut: function(fadeDuration, fadeDelay)
             {
                 var engagement  = this.settings.engagement;
                 var id = this.element.id;
@@ -52,7 +53,8 @@
                     && engagement === false){
                     window.setTimeout(function(){
                         $('#'+id).modal({
-                            fadeDuration: 250
+                            fadeDuration: fadeDuration,
+                            fadeDelay: fadeDelay
                         });
                     }, 2000);
                 }
@@ -60,7 +62,7 @@
                 sessionStorage.setItem("popped", m_trigger);
             },
 
-            isMouseLeave: function()
+            isMouseLeave: function(fadeDuration, fadeDelay)
             {
                 var id = this.element.id;
                 var mouseLeave = this.settings.mouseLeave;
@@ -83,17 +85,16 @@
                 $('body').mouseleave(function(){
 
                     var activated = $('#coupon-cards');
-
                     if (engagement === false && trigger <= 2 && mCounter <= 3) {
-
                         if ( activated.length && activated.css('display') ==  'none') {
-                        $('#'+id).modal({
-                            fadeDuration: 250
-                        });
-                        setCookieForPage();
-                        m_trigger++;
-                        sessionStorage.setItem("popped", m_trigger);
-                        checkCookies();
+                            $('#'+id).modal({
+                                fadeDuration: fadeDuration,
+                                fadeDelay: fadeDelay
+                            });
+                            setCookieForPage();
+                            m_trigger++;
+                            sessionStorage.setItem("popped", m_trigger);
+                            checkCookies();
                         }
                     }
                 });
@@ -120,7 +121,11 @@
                         $('#'+id).modal();
                     }
                     else if(pageCounter*7 < Math.trunc(timeToRead*(2/3)) ){
-                        ('#'+id).modal();
+                        ('#'+id).modal({
+                            fadeDuration: fadeDuration,
+                            fadeDelay: fadeDelay,
+
+                        });
                     }
                 };
 
@@ -140,19 +145,6 @@
 
                 setInterval(runModalCounter, 1000);
                 runModalCounter();
-            },
-
-            detectButtonActivatedModal: function(){
-
-                var setModalCookie = function() {
-                    var cval = Math.random().toString(36).substring(2, 15);
-                    Cookies.set('buttonmodal', cval);
-                };
-
-                $("#coupon-cards" ).click(function() {
-                        console.log( "Goodbye!" );
-                        setModalCookie();
-                });
             },
 
             // get word count using p nodes
