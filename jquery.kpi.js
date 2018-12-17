@@ -84,9 +84,9 @@
 
                     var activated = $('#coupon-cards');
 
-                    if (engagement === false && trigger <= 2 && mCounter <= 1) {
+                    if (engagement === false && trigger <= 2 && mCounter <= 3) {
 
-                        if (activated.length == 0 || activated.css('display') ==  'none') {
+                        if ( activated.length && activated.css('display') ==  'none') {
                         $('#'+id).modal({
                             fadeDuration: 250
                         });
