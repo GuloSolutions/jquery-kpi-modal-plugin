@@ -45,3 +45,4 @@
     "jscs": "jscs src",
     "test": "npm run jscs && grunt travis --verbose"
   }
+}
