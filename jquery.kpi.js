@@ -7,11 +7,12 @@
                 isCookieSet: false,
                 mouseLeave: false,
                 pageCounter: 0,
-                timeToRead: 0,
                 timeToTrigger: 0,
                 modalCounter:0,
                 fadeDuration: 250,
-                fadeDelay: 0
+                fadeDelay: 0,
+                pageHits: 0,
+                timeToRead: 0
             };
 
         function Plugin ( element, options ) {
@@ -31,6 +32,10 @@
 
         if (mCounter === undefined){
             var mCounter = 0;
+        }
+
+        if (timeToReadCounter === undefined){
+            var timeToReadCounter = 0;
         }
 
         $.extend( Plugin.prototype, {
@@ -102,25 +107,30 @@
 
             counter: function ()
             {
-                var pageCounter = this.settings.pageCounter;
                 var id = this.element.id;
                 var isCookieSet = this.settings.isCookieSet;
                 var timeToRead = this.settings.timeToRead;
 
+                if (timeToRead <= 0){
+                    return;
+                }
+
                 var runCounter = function(){
-                    if (pageCounter == 10) {
+                    if (timeToReadCounter == timeToRead) {
                         clearInterval(this);
                     }
                     else {
-                         checkConditions();
+                        timeToReadCounter++;
+                        console.log("Time to read counter " + timeToReadCounter);
+                        checkConditions();
                     }
                 };
                 // engagement is true
                 var checkConditions = function () {
-                    if (pageCounter >= 7 && isCookieSet !== true){
+                    if (timeToReadCounter >= 7 && isCookieSet !== true){
                         $('#'+id).modal();
                     }
-                    else if(pageCounter*7 < Math.trunc(timeToRead*(2/3)) ){
+                    else if(timeToReadCounter*7 < Math.trunc(timeToRead*(2/3)) ){
                         ('#'+id).modal({
                             fadeDuration: fadeDuration,
                             fadeDelay: fadeDelay,
@@ -134,8 +144,14 @@
             },
 
             modalCounter: function(){
+                var pageCounter = this.settings.pageCounter;
+
+                if (pageCounter <= 0 ){
+                       return;
+                }
+
                 var runModalCounter = function(){
-                    if (mCounter == 10) {
+                    if (mCounter == pageCounter) {
                         return;
                     } else {
                         mCounter++;
