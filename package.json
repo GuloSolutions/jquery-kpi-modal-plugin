@@ -1,7 +1,7 @@
 {
-  "name": "jquery-promotional-modal-plugin",
+  "name": "jquery-kpi-plugin",
   "version": "1.0.0",
-  "description": "Basic promotional modal",
+  "description": "Basic kpi modal",
   "main": "jquery.kpi.js",
   "repository": {
     "type": "git",
