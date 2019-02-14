@@ -28,7 +28,5 @@
     "grunt": "^1.0.3",
     "karma": "^4.0.0"
   },
-  "scripts": {
-
-  }
+  "scripts": {}
 }

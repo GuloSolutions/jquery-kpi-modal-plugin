@@ -17,15 +17,12 @@
   	- page word count is assessed on page load using p nodes
 
 - List of config params and their defaults:
-    -- engagement: false,
-    -- pageCounter: 0,
-    -- timeToRead: 0,
-    -- fadeDuration: 250,
-    -- fadeDelay: 0,
-    -- pageHits: 3,
-
-
-
+    - engagement: false,
+    - pageCounter: 0,
+    - timeToRead: 0,
+    - fadeDuration: 250,
+    - fadeDelay: 0,
+    - pageHits: 3,
 
 - `engagement` is false by default
 - `pageCounter` sets counter for events to be triggered while on page
@@ -34,12 +31,5 @@
 - `fadeDelay` sets param for jquery modal
 - `pageHits` sets number of page hits before modal is triggered
 
-
-
-
-
-
-
-
 - Dependencies:
-  - Jquery, js-cookie, jquery-modal
+  - jquery, js-cookie, jquery-modal
