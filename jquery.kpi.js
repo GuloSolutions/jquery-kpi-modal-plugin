@@ -7,11 +7,12 @@
                 isCookieSet: false,
                 mouseLeave: false,
                 pageCounter: 0,
+                timeToRead: 0,
                 timeToTrigger: 0,
                 modalCounter:0,
                 fadeDuration: 250,
                 fadeDelay: 0,
-                pageHits: 0,
+                pageHits: 3,
                 timeToRead: 0
             };
 
@@ -38,10 +39,18 @@
             var timeToReadCounter = 0;
         }
 
+        if (sessionStorage.getItem("pages") === undefined) {
+            var pageHitsCurrent = 0;
+            sessionStorage.setItem("pages", pageHitsCurrent);
+        } else {
+            var pageHitsCurrent = sessionStorage.getItem("pages");
+        }
+
         $.extend( Plugin.prototype, {
             init: function() {
                 this.modalCounter();
                 this.counter();
+                this.countPageHits();
 
                 this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
                 if (this.settings.engagement === true){
@@ -128,7 +137,10 @@
                 // engagement is true
                 var checkConditions = function () {
                     if (timeToReadCounter >= 7 && isCookieSet !== true){
-                        $('#'+id).modal();
+                        $('#'+id).modal({
+                            fadeDuration: fadeDuration,
+                            fadeDelay: fadeDelay,
+                        });
                     }
                     else if(timeToReadCounter*7 < Math.trunc(timeToRead*(2/3)) ){
                         ('#'+id).modal({
@@ -145,7 +157,6 @@
 
             modalCounter: function(){
                 var pageCounter = this.settings.pageCounter;
-
                 if (pageCounter <= 0 ){
                        return;
                 }
@@ -179,13 +190,37 @@
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
                 }
             },
-        } );
+            countPageHits: function()
+            {
+                var pageHits = this.settings.pageHits;
+                var pageHitsCurrent = sessionStorage.getItem("pages");
+                var id = this.element.id;
+
+                if (pageHitsCurrent > pageHits) {
+                    return;
+                }
+
+                if (pageHits == pageHitsCurrent && this.settings.isCookieSet === false){
+                      $('#'+id).modal({
+                            fadeDuration: this.settings.fadeDuration,
+                            fadeDelay:  this.settings.fadeDelay,
+                    });
+                }
+
+                $(window).unload(function() {
+                    pageHitsCurrent++;
+                    sessionStorage.setItem("pages", pageHitsCurrent++);
+                    console.log(pageHitsCurrent++);
+                    return;
+                });
+            },
+        });
 
         $.fn[ pluginName ] = function( options ) {
             return this.each( function() {
                 if ( !$.data( this, "plugin_" + pluginName ) ) {
                     $.data( this, "plugin_" +
-                        pluginName, new Plugin( this, options ) );
+                       pluginName, new Plugin( this, options ) );
                 }
             } );
         };
