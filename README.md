@@ -16,5 +16,30 @@
   	- if engagement is set to true, the popover will appear not sooner than approximately 40s or 2/3 of the time required to finish reading the page, whichever is shorter
   	- page word count is assessed on page load using p nodes
 
+- List of config params and their defaults:
+    -- engagement: false,
+    -- pageCounter: 0,
+    -- timeToRead: 0,
+    -- fadeDuration: 250,
+    -- fadeDelay: 0,
+    -- pageHits: 3,
+
+
+
+
+- `engagement` is false by default
+- `pageCounter` sets counter for events to be triggered while on page
+- `timeToRead` sets time to read text on page
+- `fadeDuration` sets param for jquery modal
+- `fadeDelay` sets param for jquery modal
+- `pageHits` sets number of page hits before modal is triggered
+
+
+
+
+
+
+
+
 - Dependencies:
   - Jquery, js-cookie, jquery-modal

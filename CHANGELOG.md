@@ -4,6 +4,6 @@
 
 ## 1.0.1 - 2019-02-13
 
-- Make a pageCounter param dynamic
-- Add timeToRead plugin config param separate from the modal counter to check time elapsed for reading  and make it dynamic
-- Add pageHits plugin config param
+- Make pageCounter param dynamic
+- Add timeToRead  config param separate from the modal counter to check time elapsed for reading  and make it dynamic
+- Add pageHits config param

@@ -9,7 +9,6 @@
                 pageCounter: 0,
                 timeToRead: 0,
                 timeToTrigger: 0,
-                modalCounter:0,
                 fadeDuration: 250,
                 fadeDelay: 0,
                 pageHits: 3,
