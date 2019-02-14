@@ -1,6 +1,6 @@
 # jquery-kpi-plugin
 
-- Manually install the plugin (it will be added to the npm registry)
+- Install the plugin using `npm i jquery-kpi-plugin`
 - Call the plugin:
 	-  ``` $(#selector).kpi({ params });```
 	- for the selector, choose any DOM element with id
