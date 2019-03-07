@@ -14,3 +14,8 @@
 - Add option for newsletter subscription
 - Exclude a page
 
+
+## 1.0.3 - 2019-03-07
+
+- Fix typo
+

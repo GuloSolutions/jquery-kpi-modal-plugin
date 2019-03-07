@@ -1,6 +1,6 @@
 {
   "name": "jquery-kpi-plugin",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Basic kpi modal",
   "main": "jquery.kpi.js",
   "repository": {

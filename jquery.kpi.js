@@ -198,7 +198,7 @@
                 var newsletter = sessionStorage.getItem('newsletter');
 
                 if (pageHits == 0 || pageHitsCurrent > pageHits || newsletter === 1 ) {
-                    exit();
+                    return;
                 }
 
                 if (pageHits == pageHitsCurrent &&  newsletter != 1){
