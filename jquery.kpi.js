@@ -4,6 +4,7 @@
         var pluginName = "kpi",
             defaults = {
                 engagement: false,
+                doNotRunOn: '',
                 isCookieSet: false,
                 mouseLeave: false,
                 pageCounter: 0,
@@ -11,8 +12,9 @@
                 timeToTrigger: 0,
                 fadeDuration: 250,
                 fadeDelay: 0,
-                pageHits: 3,
-                timeToRead: 0
+                pageHits: 5,
+                timeToRead: 0,
+                subscribed: false
             };
 
         function Plugin ( element, options ) {
@@ -40,23 +42,26 @@
 
         if (sessionStorage.getItem("pages") === undefined) {
             var pageHitsCurrent = 0;
-            sessionStorage.setItem("pages", pageHitsCurrent);
-        } else {
-            var pageHitsCurrent = sessionStorage.getItem("pages");
+        }
+
+        if (sessionStorage.getItem("newsletter") === undefined) {
+            sessionStorage.setItem("newsletter", 0);
         }
 
         $.extend( Plugin.prototype, {
             init: function() {
-                this.modalCounter();
-                this.counter();
-                this.countPageHits();
+                if ( this.settings.doNotRunOn.length && window.location.href.indexOf(this.settings.doNotRunOn) == -1 ){
+                    this.modalCounter();
+                    this.counter();
+                    this.subscribed();
+                    this.countPageHits();
 
-                this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
-                if (this.settings.engagement === true){
-                    this.checkWordCount();
-                }
-            },
-
+                    this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
+                    if (this.settings.engagement === true){
+                        this.checkWordCount();
+                    }
+            }
+        },
             timeOut: function(fadeDuration, fadeDelay)
             {
                 var engagement  = this.settings.engagement;
@@ -96,7 +101,6 @@
                 };
 
                 $('body').mouseleave(function(){
-
                     var activated = $('#coupon-cards');
                     if (engagement === false && trigger <= 2 && mCounter <= 3) {
                         if ( activated.length && activated.css('display') ==  'none') {
@@ -112,7 +116,6 @@
                     }
                 });
             },
-
             counter: function ()
             {
                 var id = this.element.id;
@@ -149,7 +152,6 @@
                         });
                     }
                 };
-
                 setInterval(runCounter, 6000);
                 runCounter();
             },
@@ -189,28 +191,34 @@
                     timeToRead = Math.ceil(wordCount / wordsPerMinute)*60;
                 }
             },
-            countPageHits: function()
-            {
+            countPageHits: function(){
                 var pageHits = this.settings.pageHits;
                 var pageHitsCurrent = sessionStorage.getItem("pages");
                 var id = this.element.id;
+                var newsletter = sessionStorage.getItem('newsletter');
 
-                if (pageHitsCurrent > pageHits) {
-                    return;
+                if (pageHits == 0 || pageHitsCurrent > pageHits || newsletter === 1 ) {
+                    exit();
                 }
 
-                if (pageHits == pageHitsCurrent && this.settings.isCookieSet === false){
+                if (pageHits == pageHitsCurrent &&  newsletter != 1){
                       $('#'+id).modal({
                             fadeDuration: this.settings.fadeDuration,
                             fadeDelay:  this.settings.fadeDelay,
                     });
                 }
 
-                $(window).unload(function() {
+                $(window).on('unload', function() {
                     pageHitsCurrent++;
-                    sessionStorage.setItem("pages", pageHitsCurrent++);
-                    console.log(pageHitsCurrent++);
-                    return;
+                    sessionStorage.setItem("pages", pageHitsCurrent);
+                });
+            },
+
+            subscribed: function() {
+                 $('input[type="submit"]').on('click', function() {
+                    if ($(this).val().toLowerCase() == 'subscribe'){
+                        sessionStorage.setItem("newsletter",  1);
+                    }
                 });
             },
         });
