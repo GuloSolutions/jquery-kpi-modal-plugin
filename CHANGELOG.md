@@ -15,7 +15,12 @@
 - Exclude a page
 
 
-## 1.0.3 - 2019-03-07
+## 1.0.4 - 2019-03-07
 
 - Fix typo
+
+## 1.0.5 - 2019-03-07
+
+- Move up condition that checks subscription
+
 

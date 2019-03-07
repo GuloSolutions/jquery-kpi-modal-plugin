@@ -12,7 +12,7 @@
                 timeToTrigger: 0,
                 fadeDuration: 250,
                 fadeDelay: 0,
-                pageHits: 5,
+                pageHits: 0,
                 timeToRead: 0,
                 subscribed: false
             };
@@ -50,7 +50,9 @@
 
         $.extend( Plugin.prototype, {
             init: function() {
-                if ( this.settings.doNotRunOn.length && window.location.href.indexOf(this.settings.doNotRunOn) == -1 ){
+                if ( this.settings.doNotRunOn.length &&
+                        window.location.href.indexOf(this.settings.doNotRunOn) == -1  &&
+                        sessionStorage.getItem("newsletter") != 1){
                     this.modalCounter();
                     this.counter();
                     this.subscribed();
@@ -195,13 +197,12 @@
                 var pageHits = this.settings.pageHits;
                 var pageHitsCurrent = sessionStorage.getItem("pages");
                 var id = this.element.id;
-                var newsletter = sessionStorage.getItem('newsletter');
 
-                if (pageHits == 0 || pageHitsCurrent > pageHits || newsletter === 1 ) {
+                if (pageHits == 0 || pageHitsCurrent > pageHits ) {
                     return;
                 }
 
-                if (pageHits == pageHitsCurrent &&  newsletter != 1){
+                if (pageHits == pageHitsCurrent){
                       $('#'+id).modal({
                             fadeDuration: this.settings.fadeDuration,
                             fadeDelay:  this.settings.fadeDelay,
