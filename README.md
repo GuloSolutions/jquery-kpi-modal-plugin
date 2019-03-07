@@ -22,7 +22,9 @@
     - timeToRead: 0,
     - fadeDuration: 250,
     - fadeDelay: 0,
-    - pageHits: 3,
+    - pageHits: 0,
+    - doNotRunOn: ''
+
 
 - `engagement` is false by default
 - `pageCounter` sets counter for events to be triggered while on page
@@ -30,6 +32,7 @@
 - `fadeDuration` sets param for jquery modal
 - `fadeDelay` sets param for jquery modal
 - `pageHits` sets number of page hits before modal is triggered
+- `doNotRunOn` enter a string to exclude a page
 
 - Dependencies:
   - jquery, js-cookie, jquery-modal
