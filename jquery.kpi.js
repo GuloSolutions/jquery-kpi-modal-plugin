@@ -5,7 +5,6 @@
             defaults = {
                 engagement: false,
                 doNotRunOn: '',
-                isCookieSet: false,
                 mouseLeave: false,
                 pageCounter: 0,
                 timeToRead: 0,
@@ -14,7 +13,8 @@
                 fadeDelay: 0,
                 pageHits: 0,
                 timeToRead: 0,
-                subscribed: false
+                subscribed: false,
+                regex: ''
             };
 
         function Plugin ( element, options ) {
@@ -50,19 +50,20 @@
 
         $.extend( Plugin.prototype, {
             init: function() {
-                // if ( this.settings.doNotRunOn.length &&
-                //         window.location.href.indexOf(this.settings.doNotRunOn) == -1  &&
-                //         sessionStorage.getItem("newsletter") != 1){
-                    this.modalCounter();
-                    this.counter();
-                    this.subscribed();
-                    this.countPageHits();
 
-                    this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
-                    if (this.settings.engagement === true){
-                        this.checkWordCount();
-                    }
-            //}
+                if (this.detectUrlRegex()){
+                    return;
+                }
+
+                this.modalCounter();
+                this.counter();
+                this.subscribed();
+                this.countPageHits();
+
+                this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
+                if (this.settings.engagement === true){
+                    this.checkWordCount();
+                 }
         },
             timeOut: function(fadeDuration, fadeDelay)
             {
@@ -90,7 +91,6 @@
                 var trigger = sessionStorage.getItem("popped");
 
                 this.setCookies('modalpopupcookie');
-
                 this.setCookies('modalpageopened');
 
                 $('body').mouseleave(function(){
@@ -220,6 +220,17 @@
                         Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
                     }
                 },
+
+            detectUrlRegex(){
+
+                 var re = new RegExp(this.settings.regex);
+                 var sstring = window.location.pathname;
+                 var clean = sstring.replace(/\//g, '');
+                 if (clean.match(re) !== null){
+                      return true;
+                 }
+                 return false;
+            },
         });
 
         $.fn[ pluginName ] = function( options ) {
