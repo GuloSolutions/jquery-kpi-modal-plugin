@@ -4,7 +4,6 @@
         var pluginName = "kpi",
             defaults = {
                 engagement: false,
-                doNotRunOn: '',
                 mouseLeave: false,
                 pageCounter: 0,
                 timeToRead: 0,
@@ -65,7 +64,7 @@
                     this.checkWordCount();
                  }
         },
-            timeOut: function(fadeDuration, fadeDelay)
+            timeOut: function()
             {
                 var id = this.element.id;
 
@@ -86,7 +85,7 @@
                 var id = this.element.id;
                 var trigger = sessionStorage.getItem("popped");
 
-                if (this.settings.isMouseLeave === false ){
+                if (this.settings.mouseLeave === false ){
                     return;
                 }
 
@@ -211,13 +210,18 @@
                     }
                 });
             },
-            setCookies:  function(cookie, expiresIn = 3) {
+            setCookies:  function(cookie, expiresIn) {
+
+                if (!expiresIn) {
+                    expiresIn = 3;
+                }
+
                 if (Cookies.get(cookie) === undefined) {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
                 }
             },
-            detectUrlRegex(){
+            detectUrlRegex: function () {
                 if (undefined === this.settings.regex || !this.settings.regex.length){
                     return;
                 }
