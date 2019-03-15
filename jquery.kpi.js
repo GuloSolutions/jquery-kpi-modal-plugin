@@ -40,19 +40,19 @@
             var timeToReadCounter = 0;
         }
 
-        if (sessionStorage.getItem("pages") === undefined) {
+        if (sessionStorage.getItem("pages") === 'undefined') {
             var pageHitsCurrent = 0;
         }
 
-        if (sessionStorage.getItem("newsletter") === undefined) {
-            sessionStorage.setItem("newsletter", 0);
+        if (sessionStorage.getItem("newsletter") === 'undefined') {
+            sessionStorage.setItem("newsletter", 1);
         }
 
         $.extend( Plugin.prototype, {
             init: function() {
-                if ( this.settings.doNotRunOn.length &&
-                        window.location.href.indexOf(this.settings.doNotRunOn) == -1  &&
-                        sessionStorage.getItem("newsletter") != 1){
+                // if ( this.settings.doNotRunOn.length &&
+                //         window.location.href.indexOf(this.settings.doNotRunOn) == -1  &&
+                //         sessionStorage.getItem("newsletter") != 1){
                     this.modalCounter();
                     this.counter();
                     this.subscribed();
@@ -62,7 +62,7 @@
                     if (this.settings.engagement === true){
                         this.checkWordCount();
                     }
-            }
+            //}
         },
             timeOut: function(fadeDuration, fadeDelay)
             {
@@ -89,18 +89,9 @@
                 var engagement = this.settings.engagement;
                 var trigger = sessionStorage.getItem("popped");
 
-                var checkCookies =  function() {
-                    if (Cookies.get('modalpopupcookie') === undefined) {
-                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        // set cookie expiration time in 3 days
-                        Cookies.set('modalpopupcookie', cval, { expires: 3, path: '/' });
-                    }
-                };
+                this.setCookies('modalpopupcookie');
 
-                var setCookieForPage = function() {
-                    var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                    Cookies.set('modalpageopened', cval);
-                };
+                this.setCookies('modalpageopened');
 
                 $('body').mouseleave(function(){
                     var activated = $('#coupon-cards');
@@ -202,11 +193,13 @@
                     return;
                 }
 
-                if (pageHits == pageHitsCurrent){
+                if (pageHits == pageHitsCurrent || Cookies.get('newsletter') === undefined ){
                       $('#'+id).modal({
-                            fadeDuration: this.settings.fadeDuration,
-                            fadeDelay:  this.settings.fadeDelay,
+                         fadeDuration: this.settings.fadeDuration,
+                         fadeDelay:  this.settings.fadeDelay,
                     });
+
+                     this.setCookies('newsletter', 365);
                 }
 
                 $(window).on('unload', function() {
@@ -214,7 +207,6 @@
                     sessionStorage.setItem("pages", pageHitsCurrent);
                 });
             },
-
             subscribed: function() {
                  $('input[type="submit"]').on('click', function() {
                     if ($(this).val().toLowerCase() == 'subscribe'){
@@ -222,6 +214,12 @@
                     }
                 });
             },
+            setCookies:  function(cookie, expiresIn = 3) {
+                    if (Cookies.get(cookie) === undefined) {
+                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
+                    }
+                },
         });
 
         $.fn[ pluginName ] = function( options ) {
