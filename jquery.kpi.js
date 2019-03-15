@@ -60,22 +60,20 @@
                 this.subscribed();
                 this.countPageHits();
 
-                this.isMouseLeave(this.settings.fadeDuration, this.settings.fadeDelay);
+                this.isMouseLeave();
                 if (this.settings.engagement === true){
                     this.checkWordCount();
                  }
         },
             timeOut: function(fadeDuration, fadeDelay)
             {
-                var engagement  = this.settings.engagement;
                 var id = this.element.id;
 
-                if (this.settings.isCookieSet === false
-                    && engagement === false){
+                if (this.settings.engagement === false){
                     window.setTimeout(function(){
                         $('#'+id).modal({
-                            fadeDuration: fadeDuration,
-                            fadeDelay: fadeDelay
+                            fadeDuration: this.settings.fadeDuration,
+                            fadeDelay: this.settings.fadeDelay
                         });
                     }, 2000);
                 }
@@ -83,28 +81,28 @@
                 sessionStorage.setItem("popped", m_trigger);
             },
 
-            isMouseLeave: function(fadeDuration, fadeDelay)
+            isMouseLeave: function()
             {
                 var id = this.element.id;
-                var mouseLeave = this.settings.mouseLeave;
-                var engagement = this.settings.engagement;
                 var trigger = sessionStorage.getItem("popped");
 
-                this.setCookies('modalpopupcookie');
-                this.setCookies('modalpageopened');
+                if (this.settings.isMouseLeave === false ){
+                    return;
+                }
 
                 $('body').mouseleave(function(){
                     var activated = $('#coupon-cards');
-                    if (engagement === false && trigger <= 2 && mCounter <= 3) {
+                    if (this.settings.engagement === false && trigger <= 2 && mCounter <= 3) {
                         if ( activated.length && activated.css('display') ==  'none') {
                             $('#'+id).modal({
-                                fadeDuration: fadeDuration,
-                                fadeDelay: fadeDelay
+                                fadeDuration: this.settings.fadeDuration,
+                                fadeDelay: this.settings.fadeDelay
                             });
-                            setCookieForPage();
+                            this.setCookies('modalpopupcookie');
+                            this.setCookies('modalpageopened');
+
                             m_trigger++;
                             sessionStorage.setItem("popped", m_trigger);
-                            checkCookies();
                         }
                     }
                 });
@@ -193,13 +191,11 @@
                     return;
                 }
 
-                if (pageHits == pageHitsCurrent || Cookies.get('newsletter') === undefined ){
+                if (pageHits == pageHitsCurrent && Cookies.get('newsletter') === undefined ){
                       $('#'+id).modal({
                          fadeDuration: this.settings.fadeDuration,
                          fadeDelay:  this.settings.fadeDelay,
                     });
-
-                     this.setCookies('newsletter', 365);
                 }
 
                 $(window).on('unload', function() {
@@ -211,25 +207,29 @@
                  $('input[type="submit"]').on('click', function() {
                     if ($(this).val().toLowerCase() == 'subscribe'){
                         sessionStorage.setItem("newsletter",  1);
+                        this.setCookies('newsletter', 365);
                     }
                 });
             },
             setCookies:  function(cookie, expiresIn = 3) {
-                    if (Cookies.get(cookie) === undefined) {
-                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
-                    }
-                },
-
+                if (Cookies.get(cookie) === undefined) {
+                    var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                    Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
+                }
+            },
             detectUrlRegex(){
+                if (undefined === this.settings.regex || !this.settings.regex.length){
+                    return;
+                }
+                var re = new RegExp(this.settings.regex);
+                var sstring = window.location.pathname;
+                var clean = sstring.replace(/\//g, '');
 
-                 var re = new RegExp(this.settings.regex);
-                 var sstring = window.location.pathname;
-                 var clean = sstring.replace(/\//g, '');
-                 if (clean.match(re) !== null){
-                      return true;
-                 }
-                 return false;
+                if (clean.match(re) !== null){
+                    return true;
+                }
+
+                return false;
             },
         });
 
