@@ -23,7 +23,7 @@
     - fadeDuration: 250,
     - fadeDelay: 0,
     - pageHits: 0,
-    - doNotRunOn: ''
+    - regex: ''
 
 
 - `engagement` is false by default
@@ -32,7 +32,7 @@
 - `fadeDuration` sets param for jquery modal (specify in milliseconds)
 - `fadeDelay` sets param for jquery modal (specify in seconds)
 - `pageHits` sets number of page hits before modal is triggered
-- `doNotRunOn` enter a string to exclude a page
+- `regex` empty string by default
 
 - Dependencies:
   - jquery, js-cookie, jquery-modal
