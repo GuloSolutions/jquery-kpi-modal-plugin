@@ -29,8 +29,8 @@
 - `engagement` is false by default
 - `pageCounter` sets counter for events to be triggered while on page
 - `timeToRead` sets time to read text on page
-- `fadeDuration` sets param for jquery modal (specify in milliseconds)
-- `fadeDelay` sets param for jquery modal (specify in milliseconds)
+- `fadeDuration` sets param for jquery modal (specify in seconds)
+- `fadeDelay` sets param for jquery modal (specify in seconds)
 - `pageHits` sets number of page hits before modal is triggered
 - `doNotRunOn` enter a string to exclude a page
 
