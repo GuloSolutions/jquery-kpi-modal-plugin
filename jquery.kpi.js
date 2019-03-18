@@ -4,6 +4,7 @@
         var pluginName = "kpi",
             defaults = {
                 engagement: false,
+                doNotRunOn: '',
                 mouseLeave: false,
                 pageCounter: 0,
                 timeToRead: 0,
@@ -39,11 +40,11 @@
             var timeToReadCounter = 0;
         }
 
-        if (sessionStorage.getItem("pages") === 'undefined') {
-            var pageHitsCurrent = 0;
+        if (sessionStorage.getItem("pages") === undefined) {
+            sessionStorage.setItem("pages", 1);
         }
 
-        if (sessionStorage.getItem("newsletter") === 'undefined') {
+        if (sessionStorage.getItem("newsletter") === undefined) {
             sessionStorage.setItem("newsletter", 1);
         }
 
@@ -97,8 +98,8 @@
                                 fadeDuration: this.settings.fadeDuration,
                                 fadeDelay: this.settings.fadeDelay
                             });
-                            this.setCookies('modalpopupcookie');
-                            this.setCookies('modalpageopened');
+                            this.setCookies('modalpopupcookie', 3);
+                            this.setCookies('modalpageopened', 3);
 
                             m_trigger++;
                             sessionStorage.setItem("popped", m_trigger);
@@ -182,9 +183,21 @@
                 }
             },
             countPageHits: function(){
+
                 var pageHits = this.settings.pageHits;
-                var pageHitsCurrent = sessionStorage.getItem("pages");
+
+                if (sessionStorage.getItem("pages") !== null){
+                      var pageHitsCurrent = sessionStorage.getItem("pages");
+                } else {
+                    var pageHitsCurrent = 1;
+                }
+
                 var id = this.element.id;
+
+                 $(window).on('unload', function() {
+                    pageHitsCurrent++;
+                    sessionStorage.setItem("pages", pageHitsCurrent);
+                });
 
                 if (pageHits == 0 || pageHitsCurrent > pageHits ) {
                     return;
@@ -196,11 +209,6 @@
                          fadeDelay:  this.settings.fadeDelay,
                     });
                 }
-
-                $(window).on('unload', function() {
-                    pageHitsCurrent++;
-                    sessionStorage.setItem("pages", pageHitsCurrent);
-                });
             },
             subscribed: function() {
                  $('input[type="submit"]').on('click', function() {
@@ -211,11 +219,6 @@
                 });
             },
             setCookies:  function(cookie, expiresIn) {
-
-                if (!expiresIn) {
-                    expiresIn = 3;
-                }
-
                 if (Cookies.get(cookie) === undefined) {
                     var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
