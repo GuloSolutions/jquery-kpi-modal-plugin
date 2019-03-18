@@ -28,6 +28,10 @@
 - set cookies to expire in 365 for newsletter signup otherwise 3 days
 - better check for internal link navigation
 
+## 1.0.7 - 2019-03-18
+
+- set cookies as an inner var
+
 
 
 
