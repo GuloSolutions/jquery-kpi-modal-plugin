@@ -4,7 +4,6 @@
         var pluginName = "kpi",
             defaults = {
                 engagement: false,
-                doNotRunOn: '',
                 mouseLeave: false,
                 pageCounter: 0,
                 timeToRead: 0,
