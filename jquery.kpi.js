@@ -12,7 +12,6 @@
                 fadeDelay: 0,
                 pageHits: 0,
                 timeToRead: 0,
-                subscribed: false,
                 regex: ''
             };
 
@@ -97,19 +96,25 @@
                                 fadeDuration: this.settings.fadeDuration,
                                 fadeDelay: this.settings.fadeDelay
                             });
-                            this.setCookies('modalpopupcookie', 3);
-                            this.setCookies('modalpageopened', 3);
+                            setCookies('modalpopupcookie', 3);
+                            setCookies('modalpageopened', 3);
 
                             m_trigger++;
                             sessionStorage.setItem("popped", m_trigger);
                         }
                     }
                 });
+
+                var setCookies = function(cookie, expiresIn) {
+                    if (Cookies.get(cookie) === undefined) {
+                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
+                    }
+                }
             },
             counter: function ()
             {
                 var id = this.element.id;
-                var isCookieSet = this.settings.isCookieSet;
                 var timeToRead = this.settings.timeToRead;
 
                 if (timeToRead <= 0){
@@ -212,15 +217,16 @@
             subscribed: function() {
                  $('input[type="submit"]').on('click', function() {
                     if ($(this).val().toLowerCase() == 'subscribe'){
+                        setCookies('newsletter', 365);
                         sessionStorage.setItem("newsletter",  1);
-                        this.setCookies('newsletter', 365);
                     }
                 });
-            },
-            setCookies:  function(cookie, expiresIn) {
-                if (Cookies.get(cookie) === undefined) {
-                    var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                    Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
+
+                var setCookies = function(cookie, expiresIn) {
+                    if (Cookies.get(cookie) === undefined) {
+                        var cval = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        Cookies.set(cookie, cval, { expires: expiresIn, path: '/' });
+                    }
                 }
             },
             detectUrlRegex: function () {
