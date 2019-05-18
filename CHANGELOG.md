@@ -32,6 +32,10 @@
 
 - set cookies as an inner var
 
+## 1.0.8 - 2019-05-17
+
+- update jQuery
+
 
 
 
